@@ -15,7 +15,7 @@ public class Basic_Variables_and_Array {
         Scanner scan = new Scanner(System.in); //create scanner
         String name;
         System.out.println("type your name: \n");
-        name = scan.nextLine(); //scans and assgn to variable
+        name = scan.nextLine(); //scans and assign to variable
         System.out.println("hi, " + name + ", you're awesome"); //prints 'name' variable in a context
     }
 }

@@ -1,12 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import com.fathzer.soft.javaluator.DoubleEvaluator;
 
-public class Calculator implements ActionListener {
-
+public class SimpleCalculator implements ActionListener {
+    //create frame and operation buttons
     JFrame frame;
     JTextField textfield;
     JButton[] numberButtons = new JButton[10];
@@ -14,17 +12,16 @@ public class Calculator implements ActionListener {
     JButton addButton, subButton, mulButton, divButton;
     JButton decButton, equButton, delButton, clrButton, negButton;
     JPanel panel;
-    ScriptEngineManager manager;
-    ScriptEngine engine;
-
-    Font myFont = new Font("Arial", Font.BOLD, 30);
-
+    //set font
+    Font myFont = new Font("Arial", Font.BOLD, 25);
+    //create Calculator Object
     Calculator() {
+        //main Frame
         frame = new JFrame("Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(420, 550);
         frame.setLayout(null);
-
+        //screen
         textfield = new JTextField();
         textfield.setBounds(50, 25, 300, 50);
         textfield.setFont(myFont);
@@ -49,28 +46,28 @@ public class Calculator implements ActionListener {
         functionButtons[6] = delButton;
         functionButtons[7] = clrButton;
         functionButtons[8] = negButton;
-
+        //set ActionListener to operation buttons
         for (int i = 0; i < 9; i++) {
             functionButtons[i].addActionListener(this);
             functionButtons[i].setFont(myFont);
             functionButtons[i].setFocusable(false);
         }
-
+        //set ActionListener to number buttons
         for (int i = 0; i < 10; i++) {
             numberButtons[i] = new JButton(String.valueOf(i));
             numberButtons[i].addActionListener(this);
             numberButtons[i].setFont(myFont);
             numberButtons[i].setFocusable(false);
         }
-
+        //lower buttons
         negButton.setBounds(50, 430, 100, 50);
         delButton.setBounds(150, 430, 100, 50);
         clrButton.setBounds(250, 430, 100, 50);
-
+        //main panel
         panel = new JPanel();
         panel.setBounds(50, 100, 300, 300);
         panel.setLayout(new GridLayout(4, 4, 10, 10));
-
+        //add buttons
         panel.add(numberButtons[1]);
         panel.add(numberButtons[2]);
         panel.add(numberButtons[3]);
@@ -87,70 +84,62 @@ public class Calculator implements ActionListener {
         panel.add(numberButtons[0]);
         panel.add(equButton);
         panel.add(divButton);
-
         frame.add(panel);
         frame.add(negButton);
         frame.add(delButton);
         frame.add(clrButton);
         frame.add(textfield);
         frame.setVisible(true);
-
-        // Initialize ScriptEngine
-        ScriptEngineManager manager = new ScriptEngineManager();
-        engine = manager.getEngineByName("js");
-        System.out.println("Engine initialized: " + engine);
     }
-
+    //init Calculator
     public static void main(String[] args) {
         Calculator calc = new Calculator();
     }
 
     @Override
+    //Action definitions
     public void actionPerformed(ActionEvent e) {
-        try {
-            for (int i = 0; i < 10; i++) {
-                if (e.getSource() == numberButtons[i]) {
-                    textfield.setText(textfield.getText().concat(String.valueOf(i)));
-                }
-            }
-            if (e.getSource() == decButton) {
-                textfield.setText(textfield.getText().concat("."));
-            }
-            if (e.getSource() == addButton) {
-                textfield.setText(textfield.getText().concat("+"));
-            }
-            if (e.getSource() == subButton) {
-                textfield.setText(textfield.getText().concat("-"));
-            }
-            if (e.getSource() == mulButton) {
-                textfield.setText(textfield.getText().concat("*"));
-            }
-            if (e.getSource() == divButton) {
-                textfield.setText(textfield.getText().concat("/"));
-            }
-            if (e.getSource() == equButton) {
-                Object result = engine.eval(textfield.getText());
-                double resultDouble = Double.parseDouble(result.toString());
-                System.out.println("Result: " + resultDouble);
-                textfield.setText(String.valueOf(resultDouble));
-            }
-            if (e.getSource() == clrButton) {
-                textfield.setText("");
-            }
-            if (e.getSource() == delButton) {
-                String string = textfield.getText();
-                textfield.setText("");
-                for (int i = 0; i < string.length() - 1; i++) {
-                    textfield.setText(textfield.getText() + string.charAt(i));
-                }
-            }
-            if (e.getSource() == negButton) {
-                double temp = Double.parseDouble(textfield.getText());
-                temp *= -1;
-                textfield.setText(String.valueOf(temp));
-            }
-        } catch (ScriptException ex) {
-            JOptionPane.showMessageDialog(frame, "Invalid expression", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+	    for (int i = 0; i < 10; i++) {
+	        if (e.getSource() == numberButtons[i]) {
+	            textfield.setText(textfield.getText().concat(String.valueOf(i)));
+	        }
+	    }
+	    if (e.getSource() == decButton) {
+	        textfield.setText(textfield.getText().concat("."));
+	    }
+	    if (e.getSource() == addButton) {
+	        textfield.setText(textfield.getText().concat("+"));
+	    }
+	    if (e.getSource() == subButton) {
+	        textfield.setText(textfield.getText().concat("-"));
+	    }
+	    if (e.getSource() == mulButton) {
+	        textfield.setText(textfield.getText().concat("*"));
+	    }
+	    if (e.getSource() == divButton) {
+	        textfield.setText(textfield.getText().concat("/"));
+	    }
+	    if (e.getSource() == equButton) {
+            //evaluates string expression that appears on screen
+	        String Expression = textfield.getText();
+	        DoubleEvaluator evaluator = new DoubleEvaluator();
+	        Double result = evaluator.evaluate(Expression);
+	        textfield.setText(String.valueOf(result));
+	    }
+	    if (e.getSource() == clrButton) {
+	        textfield.setText("");
+	    }
+	    if (e.getSource() == delButton) {
+	        String string = textfield.getText();
+	        textfield.setText("");
+	            for (int i = 0; i < string.length() - 1; i++) {
+	                textfield.setText(textfield.getText() + string.charAt(i));
+	            }
+	        }
+	        if (e.getSource() == negButton) {
+	            double temp = Double.parseDouble(textfield.getText());
+	            temp *= -1;
+	            textfield.setText(String.valueOf(temp));
+	        }
+	}
 }

@@ -1,1 +1,1 @@
-Basic Exercises in Java :blush:
+Some Basic Exercises in Java :blush:

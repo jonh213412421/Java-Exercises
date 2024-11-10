@@ -1,3 +1,4 @@
+//escreve arquivos em um arquivo .zip
 package writer;
 
 import java.io.File;
